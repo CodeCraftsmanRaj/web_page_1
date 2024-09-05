@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Video & Audio Recorder</title>
+    <link rel="stylesheet" href="stylesam.css" />
+  </head>
+  <body>
+    <div class="background-image-wrapper">
+      <img
+        src="samiksha1.jpg"
+        class="background-image"
+        alt="Background Image"
+      />
+    </div>
+    <div class="overlay"></div>
+    <video
+      class="video-background"
+      autoplay
+      muted
+      loop
+    >
+      <source
+        src="C:\Users\Raj Mathuria\Videos\Captures\127.0.0.1_50295 - Person 2 - Microsoft​ Edge 2024-07-30 14-19-23.mp4"
+        type="video/mp4"
+      />
+      <!-- Ensure the path to your video file is correct -->
+      Your browser does not support the video tag.
+    </video>
+
+    <header>
+      <h1>Video & Audio Recorder</h1>
+    </header>
+
+    <div class="container">
+      <h2>Record Video and Audio</h2>
+      <p>
+        Use the buttons below to start and stop
+        recording.
+      </p>
+
+      <div>
+        <button class="btn" id="startRecording">
+          Start Recording
+        </button>
+        <button
+          class="btn"
+          id="stopRecording"
+          style="display: none"
+        >
+          Stop Recording
+        </button>
+      </div>
+      <video
+        id="preview"
+        autoplay
+        muted
+        controls
+      ></video>
+      <div id="status"></div>
+    </div>
+
+    <footer>
+      <p>
+        Powered by
+        <a
+          href="https://yourwebsite.com"
+          target="_blank"
+          >Your Website</a
+        >
+      </p>
+    </footer>
+
+    <script>
+      let mediaRecorder;
+      let recordedChunks = [];
+      let stream;
+
+      const startRecording =
+        document.getElementById("startRecording");
+      const stopRecording =
+        document.getElementById("stopRecording");
+      const preview =
+        document.getElementById("preview");
+      const status =
+        document.getElementById("status");
+
+      startRecording.onclick = async () => {
+        try {
+          stream =
+            await navigator.mediaDevices.getUserMedia(
+              { video: true, audio: true }
+            );
+          preview.srcObject = stream;
+
+          mediaRecorder = new MediaRecorder(
+            stream
+          );
+
+          mediaRecorder.ondataavailable = (
+            event
+          ) => {
+            if (event.data.size > 0) {
+              recordedChunks.push(event.data);
+            }
+          };
+
+          mediaRecorder.onstop = () => {
+            const blob = new Blob(
+              recordedChunks,
+              { type: "video/webm" }
+            );
+            recordedChunks = [];
+            const videoURL =
+              URL.createObjectURL(blob);
+            preview.src = videoURL;
+            preview.controls = true; // Add controls to the video element
+
+            // Optionally, upload the video blob to a server here
+            status.innerHTML = `<p>Recording saved!</p>`;
+          };
+
+          mediaRecorder.start();
+          startRecording.style.display = "none";
+          stopRecording.style.display =
+            "inline-block";
+          status.innerHTML = `<p>Recording...</p>`;
+        } catch (error) {
+          status.innerHTML = `<p>Error: ${error.message}</p>`;
+        }
+      };
+
+      stopRecording.onclick = () => {
+        if (
+          mediaRecorder &&
+          mediaRecorder.state !== "inactive"
+        ) {
+          mediaRecorder.stop();
+        }
+        if (stream) {
+          stream
+            .getTracks()
+            .forEach((track) => track.stop()); // Stop all tracks to turn off the webcam
+        }
+        startRecording.style.display =
+          "inline-block";
+        stopRecording.style.display = "none";
+        status.innerHTML = `<p>Stopped recording.</p>`;
+      };
+    </script>
+  </body>
+</html>
