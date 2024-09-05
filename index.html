@@ -1,285 +1,312 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0"
-    />
-    <title>Video & Audio Recorder</title>
-    <link rel="stylesheet" href="stylesam.css" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepFake Detection Portal</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  overflow: hidden;
-}
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #000;
+            color: white;
+        }
 
-.background-image-wrapper {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  z-index: -2;
-}
+        /* Background image styling */
+        .background-image-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
 
-.background-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: brightness(0.9) blur(1px);
-}
+        .background-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: blur(5px) brightness(0.6);
+            transition: transform 0.5s ease;
+        }
 
-.overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    135deg,
-    rgba(0, 0, 0, 0.6),
-    rgba(0, 0, 0, 0.6)
-  );
-  z-index: -1;
-}
+        .background-image-wrapper:hover .background-image {
+            transform: scale(1.1);
+        }
 
-.video-background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  object-fit: cover;
-  z-index: -1;
-}
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1;
+        }
 
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-}
+        /* Header styling */
+        header {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 50px 20px;
+            background: rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            margin-bottom: 30px;
+            width: 80%;
+        }
 
-header {
-  background-color: #0c1321;
-  width: 100%;
-  padding: 20px;
-  color: #ffffff;
-  text-align: center;
-  box-shadow: 0 4px 6px #ffffff;
-  animation: fadeInDown 1s ease-in-out;
-  border-bottom: 2px solid #ffffff;
-  filter: brightness(0.9) blur(1px);
-}
+        .team-name {
+            margin: 0;
+            font-size: 2.5em;
+            color: #FFD700;
+            animation: fadeInUp 2s ease;
+        }
 
-h1 {
-  margin: 0;
-  font-size: 2.5em;
-}
+        h1 {
+            margin: 0;
+            font-size: 3.5em;
+            color: #FFF;
+            animation: fadeInUp 2s ease;
+        }
 
-.container {
-  background-color: rgba(234, 234, 234, 0.379);
-  padding: 30px;
-  border-radius: 15px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-  max-width: 600px;
-  width: 100%;
-  text-align: center;
-  animation: fadeInUp 1.2s ease-in-out;
-}
+        .tagline {
+            font-size: 1.4em;
+            color: #FFD700;
+            margin-bottom: 30px;
+        }
 
-.btn {
-  border: 2px solid #ffffff;
-  color: #ffffff;
-  background-color: transparent;
-  padding: 12px 25px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  border-radius: 25px;
-  transition: all 0.3s ease;
-}
+        .scroll-down {
+            margin-top: 20px;
+            font-size: 2em;
+            color: #FFD700;
+            cursor: pointer;
+            animation: bounce 2s infinite;
+        }
 
-.btn:hover {
-  background-color: #0c1321;
-  color: #ffffff;
-  transform: scale(1.1);
-}
+        /* Features section styling */
+        .features-section {
+            position: relative;
+            z-index: 2;
+            padding: 50px 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+            width: 80%;
+        }
 
-.animated-btn {
-  animation: pulse 2s infinite;
-}
+        .features-section h2 {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+        }
 
-video {
-  width: 100%;
-  max-width: 500px;
-  margin: 20px 0;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
+        .features-grid {
+            display: flex;
+            flex-wrap: wrap; /* Allow items to wrap to the next line */
+            justify-content: center; /* Center items horizontally */
+            align-items: center; /* Center items vertically */
+            gap: 10px; /* Reduce space between items (horizontal and vertical) */
+            padding: 10px; //* Space between items */
+            height: 100vh; /* Full viewport height to center vertically */
+        }
+        .feature-link {
+            display: block;
+            text-decoration: none;
+            color: inherit; /* Keep the text color as it is */
+        }
 
-footer {
-  margin-top: 30px;
-  color: #888;
-  font-size: 0.9em;
-}
+        .feature-item { 
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+            width: 100%;
+            max-width: 300px;
+        }
 
-footer a {
-  color: #ffffff;
-  text-decoration: none;
-}
+        .feature-item:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.2);
+        }
 
+        .feature-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            color: #FFD700;
+        }
+
+        /* CTA section styling */
+        .cta-section {
+            background: linear-gradient(to right, #36D1DC, #5B86E5); /* Updated gradient to blue */
+            padding: 50px 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 30px;
+            width: 80%;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5em;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        /* Footer styling */
+        footer {
+            background: #000;
+            padding: 20px 0;
+            text-align: center;
+            color: white;
+            width: 100%;
+        }
+
+        footer p {
+            margin: 5px 0;
+            font-size: 0.9em;
+            color: #888;
+        }
+
+        /* Animation keyframes */
+        @keyframes fadeInUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .feature-item {
+                max-width: none;
+                margin-bottom: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
-  </head>
-  <body>
+</head>
+<body>
+    <!-- Background Image Wrapper -->
     <div class="background-image-wrapper">
-      <img
-        src="C:/Users/sm091/Music/rajtalkstoomuch.jpg"
-        class="background-image"
-        alt="Background Image"
-      /> / 
+        <img src="" alt="Background Image" class="background-image">
+        <div class="overlay"></div>
     </div>
-    <div class="overlay"></div>
-    <video
-      class="video-background"
-      autoplay
-      muted
-      loop
-    >
-      <source
-        src="C:\Users\Raj Mathuria\Videos\Captures\127.0.0.1_50295 - Person 2 - Microsoft​ Edge 2024-07-30 14-19-23.mp4"
-        type="video/mp4"
-      />
-      <!-- Ensure the path to your video file is correct -->
-      Your browser does not support the video tag.
-    </video>
 
+    <!-- Header Section -->
     <header>
-      <h1>Video & Audio Recorder</h1>
+        <h2 class="team-name">APEX 0110</h2>
+        <h1>DeepFake Detection Portal</h1>
+        <p class="tagline">Ensuring authenticity in the digital world</p>
+        <div class="scroll-down">
+            <i class="fas fa-chevron-down"></i>
+        </div>
     </header>
 
-    <div class="container">
-      <h2>Record Video and Audio</h2>
-      <p>
-        Use the buttons below to start and stop
-        recording.
-      </p>
+    <!-- Features Section -->
+    <section class="features-section">
+        <h2>Our Cutting-Edge Features</h2>
+        <div class="features-grid">
+            <a href= "bitchass.html" class="feature-link">
+	   <div class="feature-item">
+                <div class="feature-icon">
+                    <i class="fas fa-video"></i>
+                </div>
+                <h3>CNN + LSTM</h3>
+                <p>Combines visual and temporal analysis for comprehensive deep fake detection.</p>
+            </div>
+            </a>
+           
+            <a href="bitchass.html" class="feature-link">
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <i class="fas fa-cogs"></i>
+                </div>
+                <h3>XceptionNet + Inception + ResNet</h3>
+                <p>Advanced architectures for precise identification of deep fake content.</p>
+            </div>
+	    </a>
+		
+	    <a href= "bitchass.html"class="feature-link">
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h3>Capsule Networks</h3>
+                <p>Emulates human brain processing to identify subtle anomalies in content.</p>
+            </div>
+            </a>
+	    <a href="audio-video.html" class="feature-link">
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <i class="fas fa-fingerprint"></i>
+                </div>
+                <h3>Biometric & Audio-Visual </h3>
+                <p>Combines unique biological markers and synchs between audio and visual cues.</p>
+            </div>
+	    </a>
 
-      <div>
-        <button class="btn" id="startRecording">
-          Start Recording
-        </button>
-        <button
-          class="btn"
-          id="stopRecording"
-          style="display: none"
-        >
-          Stop Recording
-        </button>
-      </div>
-      <video
-        id="preview"
-        autoplay
-        muted
-        controls
-      ></video>
-      <div id="status"></div>
-    </div>
+	    <a href="bitchass.html" class="feature-link">
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3>Adversarial Training</h3>
+                <p>AI models that continuously improve to detect sophisticated deep fakes.</p>
+            </div>
+            </a>
+            
+	   
+        </div>
+    </section>
 
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <h2>Ready to Secure Your Media?</h2>
+        <p>Upload or record a video for deep fake analysis.</p>
+    </section>
+
+    <!-- Footer Section -->
     <footer>
-      <p>
-        Powered by
-        <a
-          href="https://yourwebsite.com"
-          target="_blank"
-          >Your Website</a
-        >
-      </p>
+        <p><b> Apex 0110</b></p>
     </footer>
 
-    <script>
-      let mediaRecorder;
-      let recordedChunks = [];
-      let stream;
-
-      const startRecording =
-        document.getElementById("startRecording");
-      const stopRecording =
-        document.getElementById("stopRecording");
-      const preview =
-        document.getElementById("preview");
-      const status =
-        document.getElementById("status");
-
-      startRecording.onclick = async () => {
-        try {
-          stream =
-            await navigator.mediaDevices.getUserMedia(
-              { video: true, audio: true }
-            );
-          preview.srcObject = stream;
-
-          mediaRecorder = new MediaRecorder(
-            stream
-          );
-
-          mediaRecorder.ondataavailable = (
-            event
-          ) => {
-            if (event.data.size > 0) {
-              recordedChunks.push(event.data);
-            }
-          };
-
-          mediaRecorder.onstop = () => {
-            const blob = new Blob(
-              recordedChunks,
-              { type: "video/webm" }
-            );
-            recordedChunks = [];
-            const videoURL =
-              URL.createObjectURL(blob);
-            preview.src = videoURL;
-            preview.controls = true; // Add controls to the video element
-
-            // Optionally, upload the video blob to a server here
-            status.innerHTML = `<p>Recording saved!</p>`;
-          };
-
-          mediaRecorder.start();
-          startRecording.style.display = "none";
-          stopRecording.style.display =
-            "inline-block";
-          status.innerHTML = `<p>Recording...</p>`;
-        } catch (error) {
-          status.innerHTML = `<p>Error: ${error.message}</p>`;
-        }
-      };
-
-      stopRecording.onclick = () => {
-        if (
-          mediaRecorder &&
-          mediaRecorder.state !== "inactive"
-        ) {
-          mediaRecorder.stop();
-        }
-        if (stream) {
-          stream
-            .getTracks()
-            .forEach((track) => track.stop()); // Stop all tracks to turn off the webcam
-        }
-        startRecording.style.display =
-          "inline-block";
-        stopRecording.style.display = "none";
-        status.innerHTML = `<p>Stopped recording.</p>`;
-      };
-    </script>
-  </body>
+    <script src="script.js"></script>
+</body>
 </html>
